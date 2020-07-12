@@ -7,10 +7,17 @@ public class OrderTrack implements Serializable {
 
 	private static final long serialVersionUID = 2263495280562845492L;
 
+
+	public Contact contact;
 	public List<Order> orders;
 	
-	public Contact contact;
+	public Contact getContact() {
+		return contact;
+	}
 
+	public void setContact(Contact contact) {
+		this.contact = contact;
+	}
 	public List<Order> getOrders() {
 		return orders;
 	}
@@ -19,12 +26,4 @@ public class OrderTrack implements Serializable {
 		this.orders = orders;
 	}
 
-	public Contact getContact() {
-		return contact;
-	}
-
-	public void setContact(Contact contact) {
-		this.contact = contact;
-	}
-	
 }

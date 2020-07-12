@@ -3,6 +3,7 @@ package com.jencorp.microservice.ordertracking.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,30 +16,38 @@ import com.jencorp.microservice.ordertracking.model.OrderTrack;
 @RestController
 public class OrderTrackingController {
 	
+    @Autowired
+    private ContactClient contactClient;
 	
+    @Autowired
+    private OrderClient orderClient;
+    
     @GetMapping("/CompOrders/{contactId}")
-    public ResponseEntity<?> findOrdersOfContact(@PathVariable Long contactId){
+    public ResponseEntity<?> findOrdersOfContact(@PathVariable String contactId){
     	
-    	Order order1 = new Order();
-    	order1.setCustomerID("BSBEV");
-    	order1.setOrderID("10289");
+    	List<Contact> contacts = contactClient.getContacts(contactId);
     	
-    	Order order2 = new Order();
-    	order2.setCustomerID("ISLAT");
-    	order2.setOrderID("10315");
-    	
-    	Contact contact1 = new Contact();
-    	contact1.setEmail("a_young@dickenson.com");
-    	contact1.setName("Andy Young");
+    	List<Order> orders = orderClient.getOrders(provideCustd());
     	
     	OrderTrack orderTrack = new OrderTrack();
-    	List<Order> orders = new ArrayList<Order>();
-    	orders.add(order1);
-    	orders.add(order2);
     	orderTrack.setOrders(orders);
-    	orderTrack.setContact(contact1);
+    	orderTrack.setContact(contacts.get(0));
     	
     	return ResponseEntity.ok(orderTrack);
+    }
+    
+    private static String provideCustd(){
+    	int time = (int)System.currentTimeMillis()%5;
+    	switch (time) {
+    	case 1:
+    		return "RATTC";
+    	case 2:
+    		return "WHITC";
+    	case 3:   		
+    		return "SPLIR";
+    	default:
+    		return "THEBI";
+    	}
     }
 
 }
